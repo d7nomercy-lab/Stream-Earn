@@ -1,0 +1,1142 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Streamza — Watch Dashboard</title>
+
+<style>
+:root {
+  --bg-main:#090b14;
+  --bg-card:#121526;
+  --bg-card-elevated:#181c33;
+  --accent-purple:#6c47ff;
+  --accent-purple-hover:#5835e5;
+  --accent-glow:rgba(108,71,255,.35);
+  --text-primary:#fff;
+  --text-secondary:#9499b7;
+  --text-muted:#5e6380;
+  --border-subtle:rgba(255,255,255,.08);
+  --success:#10b981;
+}
+
+* {
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
+}
+
+body {
+  background:var(--bg-main);
+  color:var(--text-primary);
+  min-height:100vh;
+  padding-bottom:90px;
+}
+
+.app-container {
+  width:100%;
+  max-width:480px;
+  margin:auto;
+  padding:16px 18px;
+}
+
+.top-bar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:24px;
+}
+
+.brand-icon {
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#6c47ff,#4c28d9);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 14px var(--accent-glow);
+  cursor:pointer;
+}
+
+.top-actions {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.icon-btn,.avatar-btn {
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+.icon-btn {
+  background:var(--bg-card-elevated);
+  border:1px solid var(--border-subtle);
+  color:white;
+}
+
+.balance-pill {
+  background:var(--bg-card-elevated);
+  border:1px solid var(--border-subtle);
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.avatar-btn {
+  background:var(--accent-purple);
+  color:white;
+  font-weight:700;
+  border:none;
+}
+
+.search-box {
+  display:none;
+  margin-bottom:18px;
+}
+
+.search-box.active {
+  display:block;
+}
+
+.search-box input,
+.input-group input {
+  width:100%;
+  padding:12px 16px;
+  border-radius:12px;
+  background:var(--bg-card-elevated);
+  border:1px solid var(--accent-purple);
+  color:white;
+  outline:none;
+}
+
+.greeting-row {
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+.greeting-label {
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.2px;
+  color:var(--text-secondary);
+  margin-bottom:4px;
+}
+
+.greeting-name {
+  font-size:30px;
+  font-weight:800;
+  margin-bottom:6px;
+}
+
+.greeting-sub {
+  font-size:14px;
+  color:var(--text-secondary);
+}
+
+.share-fab {
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#2d8cff,#1a66db);
+  border:none;
+  color:white;
+  cursor:pointer;
+}
+
+.btn-primary {
+  background:var(--accent-purple);
+  color:white;
+  border:none;
+  border-radius:12px;
+  padding:12px 20px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+.btn-primary:hover {
+  background:var(--accent-purple-hover);
+}
+
+.featured-card {
+  margin-top:22px;
+  border-radius:20px;
+  overflow:hidden;
+  background:
+    linear-gradient(180deg,rgba(18,21,38,.4),rgba(12,14,26,.96)),
+    url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=900&q=80')
+    center/cover no-repeat;
+  border:1px solid var(--border-subtle);
+  padding:86px 20px 22px;
+}
+
+.badge-tag {
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.2px;
+  color:#b4a3ff;
+  margin-bottom:8px;
+}
+
+.featured-title {
+  font-size:20px;
+  line-height:1.3;
+  margin-bottom:10px;
+}
+
+.featured-meta {
+  font-size:13px;
+  color:var(--text-secondary);
+  margin-bottom:18px;
+}
+
+.balance-card {
+  margin-top:18px;
+  background:linear-gradient(135deg,#14192d,#101d2c);
+  border:1px solid var(--border-subtle);
+  border-radius:20px;
+  padding:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.balance-card-label {
+  font-size:13px;
+  color:var(--text-secondary);
+  margin-bottom:8px;
+}
+
+.balance-card-amount {
+  font-size:28px;
+  font-weight:800;
+}
+
+.help-circle {
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--border-subtle);
+  color:var(--text-secondary);
+  cursor:pointer;
+}
+
+.view-section {
+  display:none;
+}
+
+.view-section.active {
+  display:block;
+}
+
+.section-heading {
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:14px;
+}
+
+.player-wrapper {
+  background:var(--bg-card);
+  border:1px solid var(--border-subtle);
+  border-radius:18px;
+  overflow:hidden;
+  margin-bottom:18px;
+}
+
+video {
+  width:100%;
+  display:block;
+  background:#000;
+  max-height:260px;
+}
+
+.player-controls-info {
+  padding:16px;
+}
+
+.progress-track {
+  width:100%;
+  height:8px;
+  background:rgba(255,255,255,.1);
+  border-radius:999px;
+  overflow:hidden;
+  margin:12px 0 8px;
+}
+
+.progress-fill {
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#6c47ff,#10b981);
+}
+
+.reward-status {
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  font-size:12px;
+  color:var(--text-secondary);
+}
+
+.video-list {
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.video-item {
+  background:var(--bg-card);
+  border:1px solid var(--border-subtle);
+  border-radius:14px;
+  padding:14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer;
+  gap:10px;
+}
+
+.video-item.active-video {
+  border-color:var(--accent-purple);
+  background:var(--bg-card-elevated);
+}
+
+.video-item h4 {
+  font-size:14px;
+  margin-bottom:4px;
+}
+
+.video-item p {
+  font-size:12px;
+  color:var(--text-secondary);
+}
+
+.earn-badge {
+  background:rgba(108,71,255,.18);
+  color:#b4a3ff;
+  padding:6px 10px;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.earn-badge.completed {
+  background:rgba(16,185,129,.18);
+  color:var(--success);
+}
+
+.card-box {
+  background:var(--bg-card);
+  border:1px solid var(--border-subtle);
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:16px;
+}
+
+.input-group {
+  margin-top:12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.input-group input {
+  border-color:var(--border-subtle);
+}
+
+.tx-row {
+  display:flex;
+  justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid var(--border-subtle);
+  font-size:13px;
+}
+
+.tx-row:last-child {
+  border-bottom:none;
+}
+
+.account-row {
+  padding:14px 0;
+  border-bottom:1px solid var(--border-subtle);
+}
+
+.account-row:last-child {
+  border-bottom:none;
+}
+
+.account-row p {
+  color:var(--text-secondary);
+  font-size:13px;
+  margin-top:5px;
+}
+
+.bottom-nav {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:rgba(13,16,30,.96);
+  backdrop-filter:blur(12px);
+  border-top:1px solid var(--border-subtle);
+  display:flex;
+  justify-content:space-around;
+  padding:9px 0 14px;
+  z-index:100;
+}
+
+.nav-item {
+  background:none;
+  border:none;
+  color:var(--text-muted);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  font-size:10px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.nav-item.active {
+  color:#9e85ff;
+}
+
+.nav-icon-wrap {
+  padding:6px 12px;
+  border-radius:999px;
+}
+
+.nav-item.active .nav-icon-wrap {
+  background:rgba(108,71,255,.2);
+}
+
+.toast {
+  position:fixed;
+  top:18px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#1e233d;
+  border:1px solid var(--accent-purple);
+  color:white;
+  padding:10px 18px;
+  border-radius:999px;
+  font-size:13px;
+  z-index:200;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s;
+}
+
+.toast.show {
+  opacity:1;
+}
+
+.small-note {
+  color:var(--text-secondary);
+  font-size:12px;
+  line-height:1.5;
+  margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="app-container">
+
+<header class="top-bar">
+
+  <div class="brand-icon" onclick="switchTab('dashboard')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff">
+      <path d="M8 5v14l11-7z"/>
+    </svg>
+  </div>
+
+  <div class="top-actions">
+
+    <button class="icon-btn" onclick="toggleSearch()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.3-4.3"/>
+      </svg>
+    </button>
+
+    <div class="balance-pill" onclick="switchTab('wallet')" id="headerBalance">
+      0 Credits
+    </div>
+
+    <button class="avatar-btn" onclick="switchTab('account')" id="avatarInitials">
+      R
+    </button>
+
+  </div>
+</header>
+
+<div class="search-box" id="searchBox">
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Search videos..."
+    oninput="filterVideos()"
+  >
+</div>
+
+<!-- DASHBOARD -->
+
+<main id="view-dashboard" class="view-section active">
+
+  <div class="greeting-row">
+    <div>
+      <div class="greeting-label" id="greetingTime">WELCOME</div>
+      <h1 class="greeting-name" id="displayName">Raymond</h1>
+      <p class="greeting-sub">Your Streamza dashboard.</p>
+    </div>
+
+    <button class="share-fab" onclick="copyReferral()" title="Share">
+      ↗
+    </button>
+  </div>
+
+  <button class="btn-primary" onclick="startFeaturedVideo()">
+    ▶ Explore Videos
+  </button>
+
+  <section class="featured-card">
+    <div class="badge-tag">FEATURED VIDEO</div>
+
+    <h2 class="featured-title" id="featuredTitle">
+      Big Buck Bunny — Animated Film
+    </h2>
+
+    <div class="featured-meta" id="featuredMeta">
+      Animation • Sample video
+    </div>
+
+    <button class="btn-primary" onclick="startFeaturedVideo()">
+      ▶ Play Video
+    </button>
+  </section>
+
+  <section class="balance-card">
+    <div>
+      <div class="balance-card-label">Demo Credits</div>
+      <div class="balance-card-amount" id="cardBalance">0</div>
+    </div>
+
+    <button class="help-circle" onclick="showToast('Credits are only a website demo.')">
+      ?
+    </button>
+  </section>
+
+  <div class="card-box" style="margin-top:18px;">
+    <h3 class="section-heading">Recently Added</h3>
+    <p style="color:var(--text-secondary);font-size:13px;">
+      Open the Watch tab to browse and play the available videos.
+    </p>
+    <button class="btn-primary" style="margin-top:14px;" onclick="switchTab('watch')">
+      Open Video Library
+    </button>
+  </div>
+
+</main>
+
+<!-- WATCH -->
+
+<section id="view-watch" class="view-section">
+
+  <h2 class="section-heading">Video Player</h2>
+
+  <div class="player-wrapper">
+
+    <video id="videoPlayer" controls playsinline preload="metadata">
+      <source id="videoSource" src="" type="video/mp4">
+      Your browser does not support this video format.
+    </video>
+
+    <div class="player-controls-info">
+
+      <strong id="nowPlayingTitle">Select a video</strong>
+
+      <div class="progress-track">
+        <div class="progress-fill" id="watchProgress"></div>
+      </div>
+
+      <div class="reward-status">
+        <span id="watchTimerText">Choose a video to play</span>
+        <span id="watchRewardAmount">Demo</span>
+      </div>
+
+    </div>
+  </div>
+
+  <h3 class="section-heading">Video Library</h3>
+
+  <div class="video-list" id="videoListContainer"></div>
+
+</section>
+
+<!-- WALLET -->
+
+<section id="view-wallet" class="view-section">
+
+  <div class="balance-card" style="margin-top:0;margin-bottom:18px;">
+    <div>
+      <div class="balance-card-label">Demo Credits</div>
+      <div class="balance-card-amount" id="walletBalance">0</div>
+    </div>
+  </div>
+
+  <div class="card-box">
+    <h3 class="section-heading">Credits Information</h3>
+
+    <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">
+      This is a demonstration wallet. Credits are stored locally on this
+      device and have no cash value. There are no real withdrawals or payments.
+    </p>
+  </div>
+
+  <div class="card-box">
+    <h3 class="section-heading">Activity</h3>
+    <div id="txHistoryList">
+      <p style="font-size:13px;color:var(--text-secondary);">
+        No activity yet.
+      </p>
+    </div>
+  </div>
+
+</section>
+
+<!-- REFERRALS -->
+
+<section id="view-referrals" class="view-section">
+
+  <div class="card-box">
+
+    <h3 class="section-heading">Share Streamza</h3>
+
+    <p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:14px;">
+      Share the website with friends.
+    </p>
+
+    <div class="input-group">
+      <input type="text" id="refLinkInput" readonly>
+
+      <button class="btn-primary" onclick="copyReferral()">
+        Copy Website Link
+      </button>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ACCOUNT -->
+
+<section id="view-account" class="view-section">
+
+  <div class="card-box">
+
+    <h2 class="section-heading">Account</h2>
+
+    <div class="account-row">
+      <strong>Display Name</strong>
+      <p id="accountName">Raymond</p>
+    </div>
+
+    <div class="account-row">
+      <strong>Account Type</strong>
+      <p>Local demo profile</p>
+    </div>
+
+    <div class="account-row">
+      <strong>Storage</strong>
+      <p>This browser/device</p>
+    </div>
+
+    <button class="btn-primary" style="margin-top:16px;width:100%;" onclick="editUsername()">
+      Change Display Name
+    </button>
+
+    <button class="btn-primary" style="margin-top:10px;width:100%;background:#272b43;" onclick="resetDemo()">
+      Reset Demo
+    </button>
+
+    <p class="small-note">
+      This version does not have a real login system. Your demo profile is
+      stored on this device only.
+    </p>
+
+  </div>
+
+</section>
+
+</div>
+
+<!-- NAVIGATION -->
+
+<nav class="bottom-nav">
+
+  <button class="nav-item active" id="nav-dashboard" onclick="switchTab('dashboard')">
+    <div class="nav-icon-wrap">⌂</div>
+    <span>Home</span>
+  </button>
+
+  <button class="nav-item" id="nav-watch" onclick="switchTab('watch')">
+    <div class="nav-icon-wrap">▶</div>
+    <span>Watch</span>
+  </button>
+
+  <button class="nav-item" id="nav-wallet" onclick="switchTab('wallet')">
+    <div class="nav-icon-wrap">▣</div>
+    <span>Wallet</span>
+  </button>
+
+  <button class="nav-item" id="nav-referrals" onclick="switchTab('referrals')">
+    <div class="nav-icon-wrap">♧</div>
+    <span>Share</span>
+  </button>
+
+  <button class="nav-item" id="nav-account" onclick="switchTab('account')">
+    <div class="nav-icon-wrap">●</div>
+    <span>Account</span>
+  </button>
+
+</nav>
+
+<script>
+
+// VIDEO CATALOG
+// These are sample MP4 videos for testing the player.
+
+const VIDEOS = [
+  {
+    id:"vid_1",
+    title:"Big Buck Bunny",
+    category:"Animation",
+    requiredSeconds:15,
+    url:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+  },
+  {
+    id:"vid_2",
+    title:"Elephant Dream",
+    category:"Animation",
+    requiredSeconds:15,
+    url:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+  },
+  {
+    id:"vid_3",
+    title:"For Bigger Blazes",
+    category:"Sample Video",
+    requiredSeconds:15,
+    url:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+  },
+  {
+    id:"vid_4",
+    title:"For Bigger Escapes",
+    category:"Sample Video",
+    requiredSeconds:15,
+    url:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
+  },
+  {
+    id:"vid_5",
+    title:"For Bigger Fun",
+    category:"Sample Video",
+    requiredSeconds:15,
+    url:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+  },
+  {
+    id:"vid_6",
+    title:"For Bigger Joyrides",
+    category:"Sample Video",
+    requiredSeconds:15,
+    url:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
+  },
+  {
+    id:"vid_7",
+    title:"For Bigger Meltdowns",
+    category:"Sample Video",
+    requiredSeconds:15,
+    url:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"
+  }
+];
+
+// APP STATE
+
+let state = JSON.parse(localStorage.getItem("streamza_state")) || {
+  username:"Raymond",
+  credits:0,
+  completedIds:[],
+  transactions:[]
+};
+
+let currentVideo = VIDEOS[0];
+let watchedSeconds = 0;
+let watchInterval = null;
+
+function saveState() {
+  localStorage.setItem("streamza_state",JSON.stringify(state));
+  renderUI();
+}
+
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  },3000);
+}
+
+// NAVIGATION
+
+function switchTab(tabName) {
+
+  document.querySelectorAll(".view-section")
+    .forEach(el => el.classList.remove("active"));
+
+  document.querySelectorAll(".nav-item")
+    .forEach(el => el.classList.remove("active"));
+
+  document.getElementById("view-"+tabName)
+    .classList.add("active");
+
+  document.getElementById("nav-"+tabName)
+    .classList.add("active");
+
+  if(tabName !== "watch") {
+    videoPlayer.pause();
+    clearInterval(watchInterval);
+  }
+}
+
+// SEARCH
+
+function toggleSearch() {
+
+  const box = document.getElementById("searchBox");
+
+  box.classList.toggle("active");
+
+  if(box.classList.contains("active")) {
+    switchTab("watch");
+    document.getElementById("searchInput").focus();
+  }
+}
+
+function filterVideos() {
+  const query = document.getElementById("searchInput")
+    .value.toLowerCase();
+
+  renderVideoList(query);
+}
+
+// USER ACCOUNT
+
+function editUsername() {
+
+  const newName = prompt("Enter your display name:",state.username);
+
+  if(newName && newName.trim()) {
+    state.username = newName.trim();
+    saveState();
+    showToast("Name updated");
+  }
+}
+
+function resetDemo() {
+
+  if(!confirm("Reset your demo profile and credits?")) return;
+
+  state = {
+    username:"Raymond",
+    credits:0,
+    completedIds:[],
+    transactions:[]
+  };
+
+  localStorage.removeItem("streamza_state");
+
+  saveState();
+  showToast("Demo reset");
+}
+
+// FEATURED VIDEO
+
+function startFeaturedVideo() {
+  switchTab("watch");
+  selectVideo(VIDEOS[0].id);
+  videoPlayer.play().catch(() => {
+    showToast("Press Play on the video");
+  });
+}
+
+// VIDEO PLAYER
+
+const videoPlayer = document.getElementById("videoPlayer");
+
+function selectVideo(videoId) {
+
+  const vid = VIDEOS.find(v => v.id === videoId);
+
+  if(!vid) return;
+
+  clearInterval(watchInterval);
+
+  videoPlayer.pause();
+
+  currentVideo = vid;
+  watchedSeconds = 0;
+
+  document.getElementById("videoSource").src = vid.url;
+
+  videoPlayer.load();
+
+  document.getElementById("nowPlayingTitle").textContent = vid.title;
+
+  document.getElementById("watchRewardAmount").textContent =
+    "Demo credits";
+
+  document.getElementById("watchProgress").style.width = "0%";
+
+  if(state.completedIds.includes(vid.id)) {
+    document.getElementById("watchTimerText").textContent =
+      "Demo already completed";
+  } else {
+    document.getElementById("watchTimerText").textContent =
+      "Play video to progress";
+  }
+
+  renderVideoList();
+}
+
+// TRACK PLAYBACK
+
+videoPlayer.addEventListener("play",function() {
+
+  clearInterval(watchInterval);
+
+  watchInterval = setInterval(function() {
+
+    if(videoPlayer.paused || videoPlayer.ended || document.hidden) {
+      return;
+    }
+
+    if(state.completedIds.includes(currentVideo.id)) {
+      return;
+    }
+
+    watchedSeconds++;
+
+    const pct = Math.min(
+      100,
+      (watchedSeconds/currentVideo.requiredSeconds)*100
+    );
+
+    document.getElementById("watchProgress").style.width = pct+"%";
+
+    document.getElementById("watchTimerText").textContent =
+      "Playback: "+watchedSeconds+"/"+currentVideo.requiredSeconds+"s";
+
+    if(watchedSeconds >= currentVideo.requiredSeconds) {
+      clearInterval(watchInterval);
+      completeDemoVideo(currentVideo);
+    }
+
+  },1000);
+
+});
+
+videoPlayer.addEventListener("pause",function() {
+  clearInterval(watchInterval);
+});
+
+videoPlayer.addEventListener("ended",function() {
+  clearInterval(watchInterval);
+});
+
+// DEMO COMPLETION
+
+function completeDemoVideo(vid) {
+
+  if(state.completedIds.includes(vid.id)) return;
+
+  state.completedIds.push(vid.id);
+
+  // Demo credits only — no money or payout.
+  state.credits += 1;
+
+  state.transactions.unshift({
+    label:"Video demo completed: "+vid.title,
+    amount:"+1 Credit",
+    date:new Date().toLocaleTimeString([],{
+      hour:"2-digit",
+      minute:"2-digit"
+    })
+  });
+
+  document.getElementById("watchTimerText").textContent =
+    "Demo completed";
+
+  showToast("Demo credit added");
+
+  saveState();
+}
+
+// VIDEO LIST
+
+function renderVideoList(filter="") {
+
+  const container = document.getElementById("videoListContainer");
+
+  container.innerHTML = "";
+
+  const filtered = VIDEOS.filter(v =>
+    v.title.toLowerCase().includes(filter) ||
+    v.category.toLowerCase().includes(filter)
+  );
+
+  if(filtered.length === 0) {
+    container.innerHTML =
+      "<p style='color:var(--text-secondary);'>No videos found.</p>";
+    return;
+  }
+
+  filtered.forEach(vid => {
+
+    const done = state.completedIds.includes(vid.id);
+
+    const isCurrent = currentVideo && currentVideo.id === vid.id;
+
+    const div = document.createElement("div");
+
+    div.className = "video-item "+(isCurrent ? "active-video" : "");
+
+    div.onclick = function() {
+      selectVideo(vid.id);
+
+      switchTab("watch");
+
+      videoPlayer.play().catch(() => {
+        showToast("Press Play to start");
+      });
+    };
+
+    div.innerHTML = `
+      <div style="padding-right:10px;">
+        <h4>${vid.title}</h4>
+        <p>${vid.category} • Sample MP4</p>
+      </div>
+
+      <span class="earn-badge ${done ? "completed" : ""}">
+        ${done ? "Played" : "▶ Play"}
+      </span>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+// SHARE
+
+function copyReferral() {
+
+  const link = window.location.href;
+
+  if(navigator.clipboard && window.isSecureContext) {
+
+    navigator.clipboard.writeText(link)
+      .then(() => showToast("Website link copied"))
+      .catch(() => showToast(link));
+
+  } else {
+
+    prompt("Copy this website link:",link);
+  }
+}
+
+// UI
+
+function renderUI() {
+
+  document.getElementById("headerBalance").textContent =
+    state.credits+" Credits";
+
+  document.getElementById("cardBalance").textContent =
+    state.credits;
+
+  document.getElementById("walletBalance").textContent =
+    state.credits;
+
+  document.getElementById("displayName").textContent =
+    state.username;
+
+  document.getElementById("accountName").textContent =
+    state.username;
+
+  document.getElementById("avatarInitials").textContent =
+    state.username.slice(0,2).toUpperCase();
+
+  document.getElementById("refLinkInput").value =
+    window.location.href;
+
+  const hour = new Date().getHours();
+
+  const greet = hour < 12
+    ? "GOOD MORNING"
+    : hour < 18
+    ? "GOOD AFTERNOON"
+    : "GOOD EVENING";
+
+  document.getElementById("greetingTime").textContent = greet;
+
+  const txContainer = document.getElementById("txHistoryList");
+
+  if(state.transactions.length > 0) {
+
+    txContainer.innerHTML = state.transactions.map(tx => `
+      <div class="tx-row">
+        <span>${tx.label}
+          <small style="color:var(--text-muted)">(${tx.date})</small>
+        </span>
+        <strong style="color:var(--success)">${tx.amount}</strong>
+      </div>
+    `).join("");
+
+  } else {
+
+    txContainer.innerHTML =
+      "<p style='font-size:13px;color:var(--text-secondary);'>No activity yet.</p>";
+  }
+
+  renderVideoList();
+}
+
+// INITIALIZE
+
+renderUI();
+
+</script>
+
+</body>
+</html>
